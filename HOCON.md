@@ -1,15 +1,29 @@
 # HOCON (Human-Optimized Config Object Notation)
 
+<!--
 This is an informal spec, but hopefully it's clear.
+-->
+これは正式な仕様ではないが、明確にしておきます。
 
+<!--
 ## Goals / Background
+-->
+## 目標 / 背景
 
+<!--
 The primary goal is: keep the semantics (tree structure; set of
 types; encoding/escaping) from JSON, but make it more convenient
 as a human-editable config file format.
+-->
+まず第一目標：JSONからセマンティック（木構造、型セット、エンコーディングおよびエスケープ）を引き継いでいるが、
+もっと便利で編集しやすい設定ファイルフォーマットであること。
 
+<!--
 The following features are desirable, to support human usage:
+-->
+第二として使う価値のあるものであること。
 
+<!--
  - less noisy / less pedantic syntax
  - ability to refer to another part of the configuration (set a value to
    another value)
@@ -17,9 +31,20 @@ The following features are desirable, to support human usage:
  - a mapping to a flat properties list such as Java's system properties
  - ability to get values from environment variables
  - ability to write comments
+-->
+ - あまりうるさくなく、杓子定規でない文法
+ - 設定の別の部分を参照できる（別に定義された値を設定できる）
+ - 現在のファイルから別の設定ファイルをインポート・インクルードできる
+ - Javaのシステムプロパティのように、フラットなプロパティのリストをマッピングできる
+ - 環境変数から値を取得できる
+ - コメントを書くことができる
 
+<!--
 Implementation-wise, the format should have these properties:
+--->
+賢い実装、フォーマットは以下の性質をもつべき
 
+<!--
  - a JSON superset, that is, all valid JSON should be valid and
    should result in the same in-memory data that a JSON parser
    would have produced.
@@ -30,28 +55,53 @@ Implementation-wise, the format should have these properties:
    by looking at only the next three characters. (right now, the
    only reason to look at three is to find "//" comments;
    otherwise you can parse looking at two.)
+-->
+ - JSONはスーパーセットであり、有効なJSONはJSONパーサにより同一のインメモリデータを返すべき
+ - 決定論的：フォーマットはフレキシブルでヒューリスティックでない。
+ 　何が無効であるかはっきりすべきであり、無効なファイルはエラーになるべき
+ - 予約語は最小限に：次の３つのキャラクタによってトークンに分割されるべき
+ 　（３つという理由は、//はコメントで、そのほかの２つはパースすればいい）
 
+<!--
 HOCON is significantly harder to specify and to parse than
 JSON. Think of it as moving the work from the person maintaining
 the config file to the computer program.
+-->
+HOCONは、JSONより仕様やパースがかなり難しい。
+人がメンテナンスする設定ファイルからコンピュータプログラムへ移行する作業を考えて欲しい
 
+<!--
 ## Definitions
+-->
+## 定義
 
+<!--
  - a _key_ is a string JSON would have to the left of `:` and a _value_ is
    anything JSON would have to the right of `:`. i.e. the two
    halves of an object _field_.
-
+-->
+ - 「キー」はJSON文字列であり`:`の左側に書く。右側には「値」を書く。オブジェクトの「フィールド」の区切りとなる。
+<!--
  - a _value_ is any "value" as defined in the JSON spec, plus
    unquoted strings and substitutions as defined in this spec.
+-->
+ - 値はJSON仕様と同様だが、クオートされない文字列や置換文字列がある
 
+<!--
  - a _simple value_ is any value excluding an object or array
    value.
-
+-->
+ - 単純な値は、すべての値である。オブジェクトか値の配列を除く。
+<!--
  - a _field_ is a key, any separator such as ':', and a value.
-
+-->
+ - フィールドは、キーと、区切り文字':'、値からなる
+<!--
  - references to a _file_ ("the file being parsed") can be
    understood to mean any byte stream being parsed, not just
    literal files in a filesystem.
+-->
+ - ファイルの参照は、バイトストリームとしてパースされ、ファイルシステムからはファイル文字列として理解されない
 
 ## Syntax
 
