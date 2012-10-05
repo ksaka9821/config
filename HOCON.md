@@ -91,17 +91,22 @@ HOCONは、JSONより仕様やパースがかなり難しい。
  - a _simple value_ is any value excluding an object or array
    value.
 -->
+
  - 単純な値は、すべての値である。オブジェクトか値の配列を除く。
+
 <!--
  - a _field_ is a key, any separator such as ':', and a value.
 -->
- - フィールドは、キーと、区切り文字':'、値からなる
+
+- フィールドは、キーと、区切り文字':'、値からなる
+
 <!--
  - references to a _file_ ("the file being parsed") can be
    understood to mean any byte stream being parsed, not just
    literal files in a filesystem.
 -->
- - ファイルの参照は、バイトストリームとしてパースされ、ファイルシステムからはファイル文字列として理解されない
+
+- ファイルの参照は、バイトストリームとしてパースされ、ファイルシステムからはファイル文字列として理解されない
 
 ## Syntax
 
